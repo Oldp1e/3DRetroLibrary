@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Canvas, extend } from '@react-three/fiber';
 import { OrbitControls, PerspectiveCamera } from '@react-three/drei';
-import { Mesh, BoxGeometry, MeshStandardMaterial, Group, AmbientLight, DirectionalLight, PointLight, GridHelper } from 'three';
+import { Mesh, BoxGeometry, MeshStandardMaterial, Group, AmbientLight, DirectionalLight, PointLight, GridHelper, CylinderGeometry, SpotLight } from 'three';
 import GameCartridge from './components/GameCartridge';
 import Console from './components/Console';
 import GameCard from './components/GameCard';
@@ -19,7 +19,9 @@ extend({
   AmbientLight, 
   DirectionalLight, 
   PointLight, 
-  GridHelper 
+  GridHelper,
+  CylinderGeometry,
+  SpotLight
 });
 
 function App() {
@@ -79,13 +81,21 @@ function App() {
           isAnimating={isAnimating}
         />
         
-        <ambientLight intensity={0.3} />
-        <directionalLight position={[10, 10, 5]} intensity={1} />
+        {/* Luzes ambiente melhoradas */}
+        <ambientLight intensity={0.2} color="#1a0033" />
+        <directionalLight position={[10, 10, 5]} intensity={0.8} color="#ffffff" />
         
-        {/* Luzes neon para ambiente retrô */}
-        <pointLight position={[-5, 5, 5]} color="#ff00ff" intensity={1} />
-        <pointLight position={[5, 5, 5]} color="#00ffff" intensity={1} />
-        <pointLight position={[0, -2, 5]} color="#39ff14" intensity={0.5} />
+        {/* Luz ambiente azul/roxa para volume */}
+        <ambientLight intensity={0.1} color="#4400ff" />
+        
+        {/* Luzes neon para ambiente retrô - mais intensas */}
+        <pointLight position={[-5, 5, 5]} color="#ff00ff" intensity={1.5} distance={8} />
+        <pointLight position={[5, 5, 5]} color="#00ffff" intensity={1.5} distance={8} />
+        <pointLight position={[0, -2, 5]} color="#39ff14" intensity={0.8} distance={6} />
+        
+        {/* Luzes adicionais para criar mais atmosfera */}
+        <pointLight position={[-3, 1, -2]} color="#ff6600" intensity={0.6} distance={4} />
+        <pointLight position={[3, 1, -2]} color="#6600ff" intensity={0.6} distance={4} />
 
         {/* Console no centro-baixo */}
         <Console hasSelectedGame={selectedGame !== null} />
@@ -107,8 +117,21 @@ function App() {
           />
         ))}
 
-        {/* Grid de fundo retrô */}
-        <gridHelper args={[20, 20]} position={[0, -3, 0]} />
+        {/* Grid de fundo retrô com glow */}
+        <gridHelper 
+          args={[20, 20]} 
+          position={[0, -3, 0]} 
+          color1="#00ffff"
+          color2="#ff00ff"
+        />
+        
+        {/* Grid adicional para efeito neon */}
+        <gridHelper 
+          args={[40, 40]} 
+          position={[0, -3.01, 0]} 
+          color1="rgba(57, 255, 20, 0.3)"
+          color2="rgba(255, 102, 0, 0.3)"
+        />
         
         {/* OrbitControls só quando câmera animada está desabilitada */}
         {!cameraFollowEnabled && (
