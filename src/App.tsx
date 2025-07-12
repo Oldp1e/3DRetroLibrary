@@ -43,12 +43,12 @@ function App() {
       // Cleanup quando componente desmonta
       audioManager.stopBackgroundMusic();
     };
-  }, []);
+  }, [audioManager, volume]);
 
   useEffect(() => {
     // Atualizar volume quando mudado
     audioManager.setVolume(volume);
-  }, [volume]);
+  }, [audioManager, volume]);
 
   const handleCartridgeClick = (game: Game) => {
     setSelectedGame(game);

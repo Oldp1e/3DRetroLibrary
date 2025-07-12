@@ -99,7 +99,25 @@ const AnimatedCamera: React.FC<AnimatedCameraProps> = ({
       // Voltar para câmera padrão
       set({ camera });
     }
-  }, [isEnabled, isAnimating, targetPosition, camera, set]);
+  }, [
+    isEnabled, 
+    isAnimating, 
+    targetPosition, 
+    camera, 
+    set,
+    defaultPosition.x,
+    defaultPosition.y,
+    defaultPosition.z,
+    followPosition.x,
+    followPosition.y,
+    followPosition.z,
+    insertionPosition.x,
+    insertionPosition.y,
+    insertionPosition.z,
+    zoomPosition.x,
+    zoomPosition.y,
+    zoomPosition.z
+  ]);
   
   useFrame(() => {
     if (cameraRef.current && isEnabled) {
