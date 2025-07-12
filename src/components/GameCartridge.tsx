@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect, useCallback, Suspense } from 'react';
+import React, { useRef, useState, useEffect, Suspense } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Text } from '@react-three/drei';
 import { Mesh } from 'three';
@@ -36,19 +36,6 @@ const GameCartridge: React.FC<GameCartridgeProps> = ({
       meshRef.current.rotation.x = Math.sin(time * 0.5) * 0.1;
     }
   });
-
-  // Callbacks estáveis para evitar re-renders desnecessários
-  const onInsertedCallback = useCallback(() => {
-    if (onInserted) {
-      onInserted();
-    }
-  }, [onInserted]);
-
-  const onAnimationEndCallback = useCallback(() => {
-    if (onAnimationEnd) {
-      onAnimationEnd();
-    }
-  }, [onAnimationEnd]);
 
   // Animação quando selecionado
   useEffect(() => {
@@ -94,7 +81,9 @@ const GameCartridge: React.FC<GameCartridgeProps> = ({
               ease: "power2.inOut",
               onComplete: () => {
                 // Cartucho foi inserido - mostrar card
-                onInsertedCallback();
+                if (onInserted) {
+                  onInserted();
+                }
                 
                 // Aguardar um tempo e depois voltar para posição original
                 setTimeout(() => {
@@ -125,7 +114,9 @@ const GameCartridge: React.FC<GameCartridgeProps> = ({
                                   ease: "power2.out",
                                   onComplete: () => {
                                     setIsAnimating(false);
-                                    onAnimationEndCallback();
+                                    if (onAnimationEnd) {
+                                      onAnimationEnd();
+                                    }
                                   }
                                 });
                               }
@@ -142,7 +133,7 @@ const GameCartridge: React.FC<GameCartridgeProps> = ({
         }
       });
     }
-  }, [isSelected, onInsertedCallback, onAnimationEndCallback]);
+  }, [isSelected]);
 
   const handleClick = () => {
     if (!isAnimating) {
