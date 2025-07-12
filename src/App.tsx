@@ -5,6 +5,8 @@ import { Mesh, BoxGeometry, MeshStandardMaterial, Group, AmbientLight, Direction
 import GameCartridge from './components/GameCartridge';
 import Console from './components/Console';
 import GameCard from './components/GameCard';
+import CameraToggle from './components/CameraToggle';
+import AnimatedCamera from './components/AnimatedCamera';
 import { gameData, Game } from './data/games';
 import './App.css';
 
@@ -23,10 +25,13 @@ extend({
 function App() {
   const [selectedGame, setSelectedGame] = useState<Game | null>(null);
   const [showCard, setShowCard] = useState(false);
+  const [cameraFollowEnabled, setCameraFollowEnabled] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
 
   const handleCartridgeClick = (game: Game) => {
     setSelectedGame(game);
     setShowCard(false); // Reset card visibility
+    setIsAnimating(true); // Ativar animação
     // Animar cartucho para o console será feito dentro do GameCartridge
   };
 
@@ -34,9 +39,18 @@ function App() {
     setShowCard(true);
   };
 
+  const handleAnimationEnd = () => {
+    setIsAnimating(false);
+  };
+
   const handleCloseCard = () => {
     setSelectedGame(null);
     setShowCard(false);
+    setIsAnimating(false);
+  };
+
+  const handleCameraToggle = () => {
+    setCameraFollowEnabled(!cameraFollowEnabled);
   };
 
   return (
@@ -47,9 +61,24 @@ function App() {
         <p className="retro-subtitle">RETRO GAMING LIBRARY</p>
       </div>
 
+      {/* Toggle da câmera */}
+      <CameraToggle 
+        isEnabled={cameraFollowEnabled}
+        onToggle={handleCameraToggle}
+      />
+
       {/* Cena 3D */}
       <Canvas className="canvas-3d">
-        <PerspectiveCamera makeDefault position={[0, 2, 8]} />
+        {/* Câmera animada ou padrão */}
+        {!cameraFollowEnabled && (
+          <PerspectiveCamera makeDefault position={[0, 2, 8]} />
+        )}
+        
+        <AnimatedCamera 
+          isEnabled={cameraFollowEnabled}
+          isAnimating={isAnimating}
+        />
+        
         <ambientLight intensity={0.3} />
         <directionalLight position={[10, 10, 5]} intensity={1} />
         
@@ -74,19 +103,23 @@ function App() {
             onClick={() => handleCartridgeClick(game)}
             isSelected={selectedGame?.id === game.id}
             onInserted={handleCardShow}
+            onAnimationEnd={handleAnimationEnd}
           />
         ))}
 
         {/* Grid de fundo retrô */}
         <gridHelper args={[20, 20]} position={[0, -3, 0]} />
         
-        <OrbitControls 
-          enablePan={false}
-          enableZoom={true}
-          maxPolarAngle={Math.PI / 2.2}
-          minDistance={5}
-          maxDistance={15}
-        />
+        {/* OrbitControls só quando câmera animada está desabilitada */}
+        {!cameraFollowEnabled && (
+          <OrbitControls 
+            enablePan={false}
+            enableZoom={true}
+            maxPolarAngle={Math.PI / 2.2}
+            minDistance={5}
+            maxDistance={15}
+          />
+        )}
       </Canvas>
 
       {/* Card de informações do jogo */}

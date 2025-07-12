@@ -12,6 +12,7 @@ interface GameCartridgeProps {
   onClick: () => void;
   isSelected: boolean;
   onInserted?: () => void;
+  onAnimationEnd?: () => void; // Novo callback para fim da animação
 }
 
 const GameCartridge: React.FC<GameCartridgeProps> = ({ 
@@ -19,7 +20,8 @@ const GameCartridge: React.FC<GameCartridgeProps> = ({
   position, 
   onClick, 
   isSelected,
-  onInserted
+  onInserted,
+  onAnimationEnd
 }) => {
   const meshRef = useRef<Mesh>(null);
   const [hovered, setHovered] = useState(false);
@@ -110,7 +112,12 @@ const GameCartridge: React.FC<GameCartridgeProps> = ({
                                   y: originalRotation.y,
                                   z: originalRotation.z,
                                   ease: "power2.out",
-                                  onComplete: () => setIsAnimating(false)
+                                  onComplete: () => {
+                                    setIsAnimating(false);
+                                    if (onAnimationEnd) {
+                                      onAnimationEnd();
+                                    }
+                                  }
                                 });
                               }
                             }
