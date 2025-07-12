@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/3DRetroLibrary/static/css/main.2274e64e.css",
+    "main.js": "/3DRetroLibrary/static/js/main.57f2e22b.js",
+    "index.html": "/3DRetroLibrary/index.html",
+    "main.2274e64e.css.map": "/3DRetroLibrary/static/css/main.2274e64e.css.map",
+    "main.57f2e22b.js.map": "/3DRetroLibrary/static/js/main.57f2e22b.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.2274e64e.css",
+    "static/js/main.57f2e22b.js"
+  ]
+}
