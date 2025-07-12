@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Canvas, extend } from '@react-three/fiber';
 import { OrbitControls, PerspectiveCamera } from '@react-three/drei';
 import { Mesh, BoxGeometry, MeshStandardMaterial, Group, AmbientLight, DirectionalLight, PointLight, GridHelper, CylinderGeometry, SpotLight } from 'three';
@@ -7,6 +7,8 @@ import Console from './components/Console';
 import GameCard from './components/GameCard';
 import CameraToggle from './components/CameraToggle';
 import AnimatedCamera from './components/AnimatedCamera';
+import VolumeControl from './components/VolumeControl';
+import AudioManager from './utils/AudioManager';
 import { gameData, Game } from './data/games';
 import './App.css';
 
@@ -29,12 +31,31 @@ function App() {
   const [showCard, setShowCard] = useState(false);
   const [cameraFollowEnabled, setCameraFollowEnabled] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [volume, setVolume] = useState(0.5);
+  const audioManager = AudioManager.getInstance();
+
+  useEffect(() => {
+    // Inicializar áudio quando o componente monta
+    audioManager.setVolume(volume);
+    audioManager.startBackgroundMusic();
+
+    return () => {
+      // Cleanup quando componente desmonta
+      audioManager.stopBackgroundMusic();
+    };
+  }, []);
+
+  useEffect(() => {
+    // Atualizar volume quando mudado
+    audioManager.setVolume(volume);
+  }, [volume]);
 
   const handleCartridgeClick = (game: Game) => {
     setSelectedGame(game);
     setShowCard(false); // Reset card visibility
     setIsAnimating(true); // Ativar animação
-    // Animar cartucho para o console será feito dentro do GameCartridge
+    // Tocar som de inserção do cartucho
+    audioManager.playSound('start');
   };
 
   const handleCardShow = () => {
@@ -55,6 +76,10 @@ function App() {
     setCameraFollowEnabled(!cameraFollowEnabled);
   };
 
+  const handleVolumeChange = (newVolume: number) => {
+    setVolume(newVolume);
+  };
+
   return (
     <div className="app">
       {/* Header retrô */}
@@ -63,10 +88,15 @@ function App() {
         <p className="retro-subtitle">RETRO GAMING LIBRARY</p>
       </div>
 
-      {/* Toggle da câmera */}
+      {/* Controles UI */}
       <CameraToggle 
         isEnabled={cameraFollowEnabled}
         onToggle={handleCameraToggle}
+      />
+      
+      <VolumeControl 
+        volume={volume}
+        onVolumeChange={handleVolumeChange}
       />
 
       {/* Cena 3D */}
