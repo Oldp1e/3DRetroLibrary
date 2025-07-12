@@ -126,7 +126,7 @@ const GameCartridge: React.FC<GameCartridgeProps> = ({
                       }
                     });
                   }
-                }, 2000);
+                }, 3000);
               }
             });
           }
