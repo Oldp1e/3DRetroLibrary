@@ -22,14 +22,21 @@ extend({
 
 function App() {
   const [selectedGame, setSelectedGame] = useState<Game | null>(null);
+  const [showCard, setShowCard] = useState(false);
 
   const handleCartridgeClick = (game: Game) => {
     setSelectedGame(game);
+    setShowCard(false); // Reset card visibility
     // Animar cartucho para o console será feito dentro do GameCartridge
+  };
+
+  const handleCardShow = () => {
+    setShowCard(true);
   };
 
   const handleCloseCard = () => {
     setSelectedGame(null);
+    setShowCard(false);
   };
 
   return (
@@ -52,7 +59,7 @@ function App() {
         <pointLight position={[0, -2, 5]} color="#39ff14" intensity={0.5} />
 
         {/* Console no centro-baixo */}
-        <Console />
+        <Console hasSelectedGame={selectedGame !== null} />
 
         {/* Cartuchos flutuando */}
         {gameData.map((game, index) => (
@@ -66,6 +73,7 @@ function App() {
             ]}
             onClick={() => handleCartridgeClick(game)}
             isSelected={selectedGame?.id === game.id}
+            onInserted={handleCardShow}
           />
         ))}
 
@@ -82,7 +90,7 @@ function App() {
       </Canvas>
 
       {/* Card de informações do jogo */}
-      {selectedGame && (
+      {selectedGame && showCard && (
         <GameCard 
           game={selectedGame} 
           onClose={handleCloseCard}

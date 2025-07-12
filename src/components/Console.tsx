@@ -2,8 +2,13 @@ import React, { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Mesh } from 'three';
 
-const Console: React.FC = () => {
+interface ConsoleProps {
+  hasSelectedGame?: boolean;
+}
+
+const Console: React.FC<ConsoleProps> = ({ hasSelectedGame = false }) => {
   const meshRef = useRef<Mesh>(null);
+  const slotRef = useRef<Mesh>(null);
 
   // Animação sutil de brilho
   useFrame((state) => {
@@ -12,6 +17,16 @@ const Console: React.FC = () => {
       // Efeito de "respiração" no brilho
       const intensity = 0.1 + Math.sin(time * 2) * 0.05;
       (meshRef.current.material as any).emissiveIntensity = intensity;
+
+      // Efeito especial no slot quando há cartucho selecionado
+      if (slotRef.current) {
+        if (hasSelectedGame) {
+          const glowIntensity = 0.5 + Math.sin(time * 5) * 0.3;
+          (slotRef.current.material as any).emissiveIntensity = glowIntensity;
+        } else {
+          (slotRef.current.material as any).emissiveIntensity = 0;
+        }
+      }
     }
   });
 
@@ -30,12 +45,14 @@ const Console: React.FC = () => {
       </mesh>
 
       {/* Slot para cartucho */}
-      <mesh position={[0, -1.7, -0.8]}>
+      <mesh ref={slotRef} position={[0, -1.7, -0.8]}>
         <boxGeometry args={[1.2, 0.2, 0.4]} />
         <meshStandardMaterial 
-          color="#000000"
+          color={hasSelectedGame ? "#ff6600" : "#000000"}
           roughness={0.1}
           metalness={0.9}
+          emissive={hasSelectedGame ? "#ff6600" : "#000000"}
+          emissiveIntensity={0}
         />
       </mesh>
 
