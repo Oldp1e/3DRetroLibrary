@@ -7,6 +7,7 @@ export interface Game {
   color: string;
   accentColor: string;
   features: string[];
+  cartridgeImage?: string; // Caminho para a imagem do cartucho
 }
 
 export const gameData: Game[] = [
@@ -18,6 +19,7 @@ export const gameData: Game[] = [
     genre: 'Card Game / Strategy',
     color: '#ff6600',
     accentColor: '#ffaa44',
+    cartridgeImage: '/images/cartridges/hearthstone.jpg',
     features: [
       'Batalhas de cartas épicas',
       'Múltiplas classes de heróis',
@@ -33,6 +35,7 @@ export const gameData: Game[] = [
     genre: 'Action / Shooter',
     color: '#0066ff',
     accentColor: '#3388ff',
+    cartridgeImage: '/images/cartridges/bf2.jpg',
     features: [
       'Heróis e vilões icônicos',
       'Batalhas galácticas épicas',
@@ -48,6 +51,7 @@ export const gameData: Game[] = [
     genre: 'Sandbox / Survival',
     color: '#39ff14',
     accentColor: '#66ff44',
+    cartridgeImage: '/images/cartridges/minecraft.jpg',
     features: [
       'Mundos infinitos para explorar',
       'Modo criativo e sobrevivência',
@@ -63,6 +67,7 @@ export const gameData: Game[] = [
     genre: 'Simulation / Management',
     color: '#ff00ff',
     accentColor: '#ff44ff',
+    cartridgeImage: '/images/cartridges/jurassic.jpg',
     features: [
       'Criação de dinossauros',
       'Gestão de parque temático',
@@ -78,6 +83,7 @@ export const gameData: Game[] = [
     genre: 'Action / Adventure',
     color: '#00ffff',
     accentColor: '#44ffff',
+    cartridgeImage: '/images/cartridges/zelda.jpg',
     features: [
       'Exploração de mundo aberto',
       'Puzzles desafiadores',

@@ -1,8 +1,9 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, Suspense } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Text } from '@react-three/drei';
 import { Mesh } from 'three';
 import { Game } from '../data/games';
+import CartridgeWithTexture from './CartridgeWithTexture';
 import gsap from 'gsap';
 
 interface GameCartridgeProps {
@@ -144,23 +145,33 @@ const GameCartridge: React.FC<GameCartridgeProps> = ({
         onPointerOut={() => setHovered(false)}
         scale={hovered ? 1.1 : 1}
       >
-        {/* Corpo do cartucho */}
-        <boxGeometry args={[1, 1.5, 0.3]} />
-        <meshStandardMaterial 
-          color={isSelected ? '#ffffff' : game.color}
-          emissive={hovered ? game.color : '#000000'}
-          emissiveIntensity={hovered ? 0.3 : 0}
-          roughness={0.3}
-          metalness={0.7}
-        />
+        {/* Corpo do cartucho com textura opcional */}
+        <Suspense fallback={
+          <>
+            <boxGeometry args={[1, 1.5, 0.3]} />
+            <meshStandardMaterial 
+              color={isSelected ? '#ffffff' : game.color}
+              emissive={hovered ? '#ffffff' : '#000000'}
+              emissiveIntensity={hovered ? 0.1 : 0}
+              roughness={0.3}
+              metalness={0.7}
+            />
+          </>
+        }>
+          <CartridgeWithTexture 
+            game={game} 
+            isSelected={isSelected} 
+            hovered={hovered} 
+          />
+        </Suspense>
         
         {/* Borda superior do cartucho */}
         <mesh position={[0, 0.8, 0]}>
           <boxGeometry args={[1.1, 0.1, 0.4]} />
           <meshStandardMaterial 
             color={game.accentColor}
-            emissive={hovered ? game.accentColor : '#000000'}
-            emissiveIntensity={hovered ? 0.2 : 0}
+            emissive={hovered ? '#ffffff' : '#000000'}
+            emissiveIntensity={hovered ? 0.08 : 0}
           />
         </mesh>
       </mesh>
@@ -178,13 +189,13 @@ const GameCartridge: React.FC<GameCartridgeProps> = ({
         {game.name}
       </Text>
 
-      {/* Efeito de brilho quando hover */}
+      {/* Efeito de luz suave quando hover */}
       {hovered && (
         <pointLight
-          position={[position[0], position[1], position[2] + 1]}
-          color={game.color}
-          intensity={1}
-          distance={3}
+          position={[position[0], position[1], position[2] + 0.8]}
+          color="#ffffff"
+          intensity={0.3}
+          distance={1.5}
         />
       )}
     </group>
