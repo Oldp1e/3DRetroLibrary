@@ -15,6 +15,10 @@
 
 ---
 
+<img width="2564" height="1437" alt="image" src="https://github.com/user-attachments/assets/ccb9f034-dbc4-460d-99fb-ff331ae6237d" />
+<img width="2566" height="1433" alt="image" src="https://github.com/user-attachments/assets/05590ed8-5dab-4b30-9ae0-04eaa1b03c9c" />
+
+
 ## 🌟 Sobre o Projeto
 
 O **3D Retro Library** é um projeto experimental que explora as possibilidades do **Three.js** e **React Three Fiber** para criar uma experiência nostálgica e interativa. Imagine um arcade dos anos 80 em sua tela, onde cartuchos de jogos flutuam no espaço e você pode interagir com eles em uma experiência completamente 3D!
