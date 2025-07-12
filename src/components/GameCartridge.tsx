@@ -39,13 +39,28 @@ const GameCartridge: React.FC<GameCartridgeProps> = ({
     if (isSelected && meshRef.current) {
       setIsAnimating(true);
       
-      // Salvar posição original
+      // Salvar posição e rotação originais
       const originalPosition = {
         x: meshRef.current.position.x,
         y: meshRef.current.position.y,
         z: meshRef.current.position.z
       };
       
+      const originalRotation = {
+        x: meshRef.current.rotation.x,
+        y: meshRef.current.rotation.y,
+        z: meshRef.current.rotation.z
+      };
+      
+      // Animação de rotação gradual - alinhar suavemente durante a descida
+      gsap.to(meshRef.current.rotation, {
+        duration: 1.5,
+        x: 0, // Sem inclinação
+        y: 0, // Face frontal voltada para frente
+        z: 0, // Sem rotação lateral
+        ease: "power2.out"
+      });
+
       // Animar cartucho descendo para o console
       gsap.to(meshRef.current.position, {
         duration: 1.5,
@@ -58,16 +73,17 @@ const GameCartridge: React.FC<GameCartridgeProps> = ({
           if (meshRef.current) {
             gsap.to(meshRef.current.position, {
               duration: 0.3,
-              y: -1.25, // Posição para encaixar perfeitamente (slot em -1.7, cartucho metade da altura = 0.75/2 = 0.375, então -1.7 + 0.45 = -1.25)
+              y: -1.25, // Posição para encaixar perfeitamente
               z: -0.85, // Ligeiramente mais fundo no slot
-              ease: "power2.inOut",            onComplete: () => {
-              // Cartucho foi inserido - mostrar card
-              if (onInserted) {
-                onInserted();
-              }
-              
-              // Aguardar um tempo e depois voltar para posição original
-              setTimeout(() => {
+              ease: "power2.inOut",
+              onComplete: () => {
+                // Cartucho foi inserido - mostrar card
+                if (onInserted) {
+                  onInserted();
+                }
+                
+                // Aguardar um tempo e depois voltar para posição original
+                setTimeout(() => {
                   if (meshRef.current) {
                     // Animação de saída do slot
                     gsap.to(meshRef.current.position, {
@@ -84,24 +100,29 @@ const GameCartridge: React.FC<GameCartridgeProps> = ({
                             y: originalPosition.y,
                             z: originalPosition.z,
                             ease: "power2.out",
-                            onComplete: () => setIsAnimating(false)
+                            onComplete: () => {
+                              // Restaurar rotação original e permitir animação de flutuação novamente
+                              if (meshRef.current) {
+                                gsap.to(meshRef.current.rotation, {
+                                  duration: 0.5,
+                                  x: originalRotation.x,
+                                  y: originalRotation.y,
+                                  z: originalRotation.z,
+                                  ease: "power2.out",
+                                  onComplete: () => setIsAnimating(false)
+                                });
+                              }
+                            }
                           });
                         }
                       }
                     });
                   }
-                }, 2000); // Reduzido de 3000 para 2000ms
+                }, 2000);
               }
             });
           }
         }
-      });
-
-      // Animação de rotação especial quando inserido
-      gsap.to(meshRef.current.rotation, {
-        duration: 1.5,
-        y: meshRef.current.rotation.y + Math.PI * 2,
-        ease: "power2.out"
       });
     }
   }, [isSelected]);
