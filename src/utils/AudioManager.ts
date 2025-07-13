@@ -4,6 +4,9 @@ class AudioManager {
   private soundEffects: { [key: string]: HTMLAudioElement } = {};
   private volume: number = 0.5;
 
+  // Base path para GitHub Pages
+  private readonly BASE_PATH = '/3DRetroLibrary';
+
   private constructor() {
     this.initializeAudio();
   }
@@ -17,12 +20,12 @@ class AudioManager {
 
   private initializeAudio() {
     // Música de fundo
-    this.backgroundMusic = new Audio(process.env.PUBLIC_URL + '/audio/retro-theme.mp3');
+    this.backgroundMusic = new Audio(`${this.BASE_PATH}/audio/retro-theme.mp3`);
     this.backgroundMusic.loop = true;
     this.backgroundMusic.volume = this.volume * 0.3; // Música mais baixa que efeitos
     
     // Efeitos sonoros
-    this.soundEffects['start'] = new Audio(process.env.PUBLIC_URL + '/audio/start.mp3');
+    this.soundEffects['start'] = new Audio(`${this.BASE_PATH}/audio/start.mp3`);
     this.soundEffects['start'].volume = this.volume;
 
     // Configurar áudio para funcionar com interação do usuário
