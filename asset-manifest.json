@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/3DRetroLibrary/static/css/main.2274e64e.css",
-    "main.js": "/3DRetroLibrary/static/js/main.6bb23f50.js",
+    "main.js": "/3DRetroLibrary/static/js/main.7b170b70.js",
     "index.html": "/3DRetroLibrary/index.html",
     "main.2274e64e.css.map": "/3DRetroLibrary/static/css/main.2274e64e.css.map",
-    "main.6bb23f50.js.map": "/3DRetroLibrary/static/js/main.6bb23f50.js.map"
+    "main.7b170b70.js.map": "/3DRetroLibrary/static/js/main.7b170b70.js.map"
   },
   "entrypoints": [
     "static/css/main.2274e64e.css",
-    "static/js/main.6bb23f50.js"
+    "static/js/main.7b170b70.js"
   ]
 }
