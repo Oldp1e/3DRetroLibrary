@@ -17,12 +17,12 @@ class AudioManager {
 
   private initializeAudio() {
     // Música de fundo
-    this.backgroundMusic = new Audio('/audio/retro-theme.mp3');
+    this.backgroundMusic = new Audio(process.env.PUBLIC_URL + '/audio/retro-theme.mp3');
     this.backgroundMusic.loop = true;
     this.backgroundMusic.volume = this.volume * 0.3; // Música mais baixa que efeitos
     
     // Efeitos sonoros
-    this.soundEffects['start'] = new Audio('/audio/start.mp3');
+    this.soundEffects['start'] = new Audio(process.env.PUBLIC_URL + '/audio/start.mp3');
     this.soundEffects['start'].volume = this.volume;
 
     // Configurar áudio para funcionar com interação do usuário
